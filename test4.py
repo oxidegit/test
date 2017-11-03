@@ -31,13 +31,17 @@ def code(data, k, i):
     newxy = []
 
     #剔除异常点
+    num = 0 #异常点个数
     for x, y in oldxy:
         if (abs(y-x) <= k  ):
             newxy.append((x, y))
+        else:
+            #print ("y=%f x=%f"%(y, x))
+            num = num+1
     #print ("new %d"%(len(newxy)))
     newx, newy = zip(*newxy)
 
-    print ("第%d列中能够压缩的数据数%d"%(i, len(newxy)))
+
     """
     plt.figure(i)
     plt.scatter(newx, newy)
@@ -60,7 +64,7 @@ def code(data, k, i):
         else:
             N.append(y)
 
-    return (N, p)
+    return (N, p, len(newxy), num)
 
 def getColData(c, path):
 	a = np.loadtxt(path)
@@ -84,22 +88,33 @@ def error(p,x,y):
 
 if __name__ == "__main__":
 
+    sum = 0
+    threshold = 2
+    testRange = 50
 
-    for i in range(50):
-        data = getColData(i, "C:\\Users\\f404-1\\Desktop\\data1.txt")
-        N, p = code(data, 10, i)
-
+    for i in range(testRange):
+        data = getColData(i, "C:\\Users\\f404-1\\Desktop\\data3.txt")
+        N, p, leng, num = code(data, threshold, i)
+        sum += leng
+        """
         print("原始数据是：")
         print(list(data))
         print ("a=%f b=%f"%(p[0], p[1]))
         print ("经压缩后的数据是")
-        #print (N)
-        result = decode(N, p, 1)
+        print (N)
+        result = decode(N, p, threshold)
         print ("解压缩后的数据是")
         print (result)
+        """
+        print ("阈值为 %d 时"%(threshold))
+        print("第%d列中能够压缩的数据个数为  %d" % (i, leng))
+        #print ("其中突变点个数 %d"%(num))
 
         #rint (len(N))
+        """
         plt.figure(i)
         plt.scatter(range(len(N)), N)
         plt.show()
-
+        """
+    print("阈值是%d" % (threshold))
+    print("每一列总共%d个数平均能够压缩%f个数" % (len(data), sum / testRange))

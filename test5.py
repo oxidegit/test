@@ -35,6 +35,8 @@ def code(data, k, i):
     for x, y, z in oldxyz:
         if (abs((z-y)-(y-x)) <= k):
             newxyz.append((x, y, z))
+        #else:
+            #print ("x=%f y=%f x=%f"%(x, y, z))
     # print ("new %d"%(len(newxy)))
     newx, newy, newz = zip(*newxyz)
 
@@ -55,7 +57,7 @@ def code(data, k, i):
         else:
             N.append(z)
 
-    return (N, p)
+    return (N, p, len(newxyz))
 
 def getColData(c, path):
 	a = np.loadtxt(path)
@@ -70,16 +72,26 @@ def error(p,x1,x2,y):
     return list(map(lambda x1, x2, y: func(p, x1, x2) - y, x1, x2, y))
 
 if __name__ == "__main__":
-    for i in range(10):
-        data = getColData(i, "C:\\Users\\lenovo-pc\\Desktop\\data.txt")
-        N, p = code(data, 4, i)
+    sum = 0
+    threshold = 2
+    testRange = 50
+    for i in range(testRange):
+        i = i+3
+        data = getColData(i, "C:\\Users\\f404-1\\Desktop\\data.txt")
+        N, p, leng = code(data, threshold, i)
         print(len(N))
-
+        sum += leng
+        """
         print("原始数据是：")
         print(list(data))
+        """
         print("a=%f b=%f c=%f" % (p[0], p[1], p[2]))
         print("经压缩后的数据是")
-        print (N)
-        result = decode(N, p, 5)
+       # print (N)
+        """
+        result = decode(N, p, threshold)
         print("解压缩后的数据是")
         print(result)
+        """
+    print ("阈值是%d"%(threshold))
+    print ("每一列总共%d个数平均能够压缩%f个数"%(len(data), sum/testRange))
