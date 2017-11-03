@@ -93,7 +93,7 @@ if __name__ == "__main__":
     testRange = 50
 
     for i in range(testRange):
-        data = getColData(i, "C:\\Users\\f404-1\\Desktop\\data3.txt")
+        data = getColData(i, "C:\\Users\\f404-1\\Desktop\\test\\mydata\\newdata2.txt")
         N, p, leng, num = code(data, threshold, i)
         sum += leng
         """
@@ -107,6 +107,7 @@ if __name__ == "__main__":
         print (result)
         """
         print ("阈值为 %d 时"%(threshold))
+        print ("a=%f b=%f"%(p[0], p[1]))
         print("第%d列中能够压缩的数据个数为  %d" % (i, leng))
         #print ("其中突变点个数 %d"%(num))
 

@@ -31,6 +31,7 @@ def code(data, k, i):
     #用来保存去除突变点后的训练点
     newxyz = []
 
+
     # 剔除异常点
     for x, y, z in oldxyz:
         if (abs((z-y)-(y-x)) <= k):
@@ -40,24 +41,27 @@ def code(data, k, i):
     # print ("new %d"%(len(newxy)))
     newx, newy, newz = zip(*newxyz)
 
-    print("第%d列中能够压缩的数据数%d" % (i, len(newxyz)))
+
+
 
     p0 = [2, -1, 0]
     Para = leastsq(error, p0, args=(newx, newy, newz))
+    #Para = leastsq(error, p0, args=(oldx1, oldx2, oldy))
     a, b, c= Para[0]
 
     N = [oldx1[0], oldx2[0]]
 
     p = (a, b, c)
-
+    count=0
     for x, y, z in oldxyz:
         delta = z-func(p, x, y)
         if (abs(delta) <= k):
             N.append(delta)
+            count = count+1
         else:
             N.append(z)
 
-    return (N, p, len(newxyz))
+    return (N, p, count)
 
 def getColData(c, path):
 	a = np.loadtxt(path)
@@ -73,20 +77,21 @@ def error(p,x1,x2,y):
 
 if __name__ == "__main__":
     sum = 0
-    threshold = 2
+    threshold = 1
     testRange = 50
     for i in range(testRange):
         i = i+3
-        data = getColData(i, "C:\\Users\\f404-1\\Desktop\\data.txt")
+        data = getColData(i, "C:\\Users\\f404-1\\Desktop\\test\\mydata\\newdata2.txt")
         N, p, leng = code(data, threshold, i)
         print(len(N))
         sum += leng
+        print("第%d列中能够压缩的数据数%d" % (i, leng))
         """
         print("原始数据是：")
         print(list(data))
         """
         print("a=%f b=%f c=%f" % (p[0], p[1], p[2]))
-        print("经压缩后的数据是")
+        #print("经压缩后的数据是")
        # print (N)
         """
         result = decode(N, p, threshold)

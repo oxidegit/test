@@ -25,7 +25,7 @@ def code(data, k, i):
     oldx1 = data[:len(data)-3]
     oldx2 = data[1:len(data)-2]
     oldx3 = data[2:len(data)-1]
-    oldy = data[2:len(data)]
+    oldy = data[3:len(data)]
 
     ziped = zip(oldx1, oldx2, oldx3, oldy)
     oldxyz = list(ziped)
@@ -74,12 +74,19 @@ def error(p,x1,x2,x3, y):
     return list(map(lambda x1, x2,x3, y: func(p, x1, x2, x3) - y, x1, x2,x3, y))
 
 if __name__ == "__main__":
-    for i in range(10):
+
+    sum = 0
+    threshold = 1
+    testRange = 50
+
+    for i in range(testRange):
         i = i+3
-        data = getColData(i, "C:\\Users\\lenovo-pc\\Desktop\\data.txt")
-        N, p, count = code(data, 4.0, i)
+        data = getColData(i, "C:\\Users\\f404-1\\Desktop\\test\\mydata\\newdata3.txt")
+        N, p, count = code(data, threshold, i)
+        print ("a=%f b=%f c=%f d=%f"%(p[0], p[1], p[2], p[3]))
         print(count)
-        print(N)
+        sum = sum+count
+        #print(N)
         """
         print("原始数据是：")
         print(list(data))
@@ -90,3 +97,6 @@ if __name__ == "__main__":
         print("解压缩后的数据是")
         print(result)
         """
+
+    print("阈值是%d" % (threshold))
+    print("每一列总共%d个数平均能够压缩%f个数" % (len(data), sum / testRange))
